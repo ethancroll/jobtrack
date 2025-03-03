@@ -2,96 +2,91 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"os"
+	"time"
 )
 
-var initinput string
+var input string
 var started bool
 var cash int
 
 func main() {
-	go timer()
-	fmt.Println("welcome to the job portal, type 'help' for commands")
-	fmt.Scan(&initinput)
 	started = false
-	help()
+	go addcash()
+	fmt.Println("welcome to jobtrack, type 'help' for commands")
+	checkinput()
+}
+
+func checkinput() {
+	fmt.Scan(&input)
+	if input == "help" {
+		help()
+	}
+	if input == "start" {
+		start()
+	}
+	if input == "pause" && started == true {
+		pause()
+	}
+	if input == "pause" && started == false {
+		fmt.Println("can not pause, timer not started")
+		checkinput()
+	}
+	if input == "save" && started == false {
+		save()
+	}
+	if input == "save" && started == true {
+		fmt.Println("pause first to save")
+	}
+	if input == "status" {
+		status()
+	}
 }
 
 func help() {
-	if initinput == "help" {
-		fmt.Println("commands")
-		fmt.Println("start timer: 'start'")
-		fmt.Println("pause timer: 'pause'")
-		fmt.Println("save to txt: 'save'")
-		fmt.Println("check status: 'status'")
-		welcomeback()
-	} else {
-		start()
-	}
+	fmt.Println("commands")
+	fmt.Println("start timer: 'start'")
+	fmt.Println("pause timer: 'pause'")
+	fmt.Println("save to txt: 'save'")
+	fmt.Println("check status: 'status'")
+	checkinput()
 }
 
 func start() {
-	if initinput == "start" {
-		fmt.Println("timer started")
-		started = true
-		welcomeback()
-	} else {
-		pause()
-	}
+	started = true
+	fmt.Println("timer started")
+	checkinput()
 }
 
 func pause() {
-	if initinput == "pause" && started == true {
-		fmt.Println("timer paused")
-		started = false
-		welcomeback()
-	} else if initinput == "pause" {
-		fmt.Println("track has not started yet")
-		welcomeback()
-	} else {
-		save()
-	}
-}
-
-func save() {
-	if initinput == "save" && started == false {
-		fmt.Println("saving")
-		date := time.Now().Format("2006-01-02")
-		file, _ := os.OpenFile("track.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
-		defer file.Close()
-		file.WriteString(fmt.Sprintf("%s %.2f\n", date, float64(cash)/100.0))
-		fmt.Println("save complete")	
-		welcomeback()
-	} else if initinput == "save" {
-		fmt.Println("track is still running. pause to save")
-		welcomeback()
-	} else {
-		status()	
-	}
+	started = false
+	fmt.Println("timer paused")
+	checkinput()
 }
 
 func status() {
-	if initinput == "status" {
-		fmt.Println("current cash value:", float64(cash)/100.0)
-		welcomeback()
-	} else {
-		fmt.Println("sorry, that was not recognized. try 'help' for functions")
-		welcomeback()
-	}
+	fmt.Println("current cash value:", float64(cash)/100.0)
+	checkinput()
 }
 
-func welcomeback() {
-	fmt.Println("awating next action...")
-	fmt.Scan(&initinput)
-	help()
+func save() {
+	fmt.Println("saving")
+	date := time.Now().Format("2006-01-02")
+	file, _ := os.OpenFile("track.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	defer file.Close()
+	file.WriteString(fmt.Sprintf("%s %.2f\n", date, float64(cash)/100.0))
+	fmt.Println("save complete")
+	time.Sleep(500 * time.Millisecond)
+	fmt.Println("exiting")
+	time.Sleep(5 * time.Second)
+	os.Exit(3)
 }
 
-func timer() {
+func addcash() {
 	for {
-	if started == true {
-		cash = cash + 1
-		time.Sleep(3600 * time.Millisecond)
+		if started == true {
+			cash = cash + 1
+			time.Sleep(3600 * time.Millisecond)
+		}
 	}
-}
 }
