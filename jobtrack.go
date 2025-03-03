@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+var Reset = "\033[0m"
+var Red = "\033[31m"
+var Green = "\033[32m"
+var Magenta = "\033[35m"
+
 var input string
 var started bool
 var cash int
@@ -18,6 +23,7 @@ func main() {
 }
 
 func checkinput() {
+	fmt.Println("awating command")
 	fmt.Scan(&input)
 	if input == "help" {
 		help()
@@ -37,6 +43,7 @@ func checkinput() {
 	}
 	if input == "save" && started == true {
 		fmt.Println("pause first to save")
+		checkinput()
 	}
 	if input == "status" {
 		status()
@@ -44,7 +51,7 @@ func checkinput() {
 }
 
 func help() {
-	fmt.Println("commands")
+	fmt.Println(Green + "commands" + Reset)
 	fmt.Println("start timer: 'start'")
 	fmt.Println("pause timer: 'pause'")
 	fmt.Println("save to txt: 'save'")
@@ -54,30 +61,30 @@ func help() {
 
 func start() {
 	started = true
-	fmt.Println("timer started")
+	fmt.Println(Green + "timer started" + Reset)
 	checkinput()
 }
 
 func pause() {
 	started = false
-	fmt.Println("timer paused")
+	fmt.Println(Red + "timer paused" + Reset)
 	checkinput()
 }
 
 func status() {
-	fmt.Println("current cash value:", float64(cash)/100.0)
+	fmt.Println(Green+"current cash value:"+Reset, float64(cash)/100.0)
 	checkinput()
 }
 
 func save() {
-	fmt.Println("saving")
+	fmt.Println(Magenta + "saving" + Reset)
 	date := time.Now().Format("2006-01-02")
 	file, _ := os.OpenFile("track.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	defer file.Close()
 	file.WriteString(fmt.Sprintf("%s %.2f\n", date, float64(cash)/100.0))
-	fmt.Println("save complete")
+	fmt.Println(Green + "save complete" + Reset)
 	time.Sleep(500 * time.Millisecond)
-	fmt.Println("exiting")
+	fmt.Println(Red + "exiting" + Reset)
 	time.Sleep(5 * time.Second)
 	os.Exit(3)
 }
