@@ -28,8 +28,12 @@ func checkinput() {
 	if input == "help" {
 		help()
 	}
-	if input == "start" {
+	if input == "start" && started == false {
 		start()
+	}
+	if input == "start" && started == true {
+		fmt.Println("timer already started.")
+		checkinput()
 	}
 	if input == "pause" && started == true {
 		pause()
@@ -47,6 +51,9 @@ func checkinput() {
 	}
 	if input == "status" {
 		status()
+	} else {
+		fmt.Println("command not recognised. type 'help' for commands")
+		checkinput()
 	}
 }
 
