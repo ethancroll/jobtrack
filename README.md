@@ -1,6 +1,6 @@
-# Jobtrack
+# jobtrack
 
-Jobtrack is a simple command-line income tracker. Start the timer when you begin working, check your total at any time, and save the results to a text file.
+jobtrack is a simple command-line income tracker. Start the timer when you begin working, check your total at any time, and save the results to a text file.
 
 ## Run
 
