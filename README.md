@@ -1,4 +1,21 @@
-Hello all!
-Jobtrac is a simple command line income tracker for jobs. The results are saved to a txt file. To change the earning rate, change the time.Sleep in the addcash() function. If ou have any problems, or suggestions, please post them on the issues tab, and I will attend to them as soon as I can. 
-Have a great one!
--Ethan c
+# jobtrack
+
+jobtrack is a simple command-line income tracker. Start the timer when you begin working, check your total at any time, and save the results to a text file.
+
+## Run
+
+```bash
+go run jobtrack.go
+```
+
+## Commands
+
+- `help` shows the available commands
+- `start` begins tracking
+- `pause` stops tracking without exiting
+- `status` prints the current total
+- `save` writes the total to `track.txt` and exits
+
+## Adjust the earning rate
+
+Update the `time.Sleep` duration inside the `addcash()` function to change how quickly earnings accumulate.
